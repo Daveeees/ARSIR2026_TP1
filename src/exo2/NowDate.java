@@ -9,7 +9,7 @@ public class NowDate {
 
 
     public String DateToString() {
-        return localTime.toString();
+        return localDate.toString();
     }
     public String TimeToString() { return localTime.toString(); }
 
