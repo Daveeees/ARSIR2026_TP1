@@ -2,7 +2,6 @@ package exo2;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.Scanner;
 import java.time.Duration;
 import java.time.LocalTime;
 
