@@ -1,4 +1,4 @@
-package exo3;
+package exo3_1;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -23,8 +23,15 @@ public class ServeurTCP {
                  ObjectOutputStream fluxSortie = new ObjectOutputStream(socketClient.getOutputStream());
                  String message = (String) fluxEntree.readObject();
                  System.out.println("Message reçu: " + message);
-                 fluxSortie.writeObject("Accusé de réception");
 
+                 // 4 - Création de l'heure courante
+                 NowDate date =  new NowDate();
+
+                 // 5 - Envoi de l'heure courante au client
+                 fluxSortie.writeObject("Heure actuelle: " + date.TimeToString());
+
+                 // 6 - Fermer la socket du client
+                 socketClient.close();
                  }
              }catch(Exception e){
              System.err.println(e);

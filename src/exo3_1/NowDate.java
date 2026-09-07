@@ -1,4 +1,4 @@
-package exo3;
+package exo3_1;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -9,7 +9,7 @@ public class NowDate {
 
 
     public String DateToString() {
-        return localTime.toString();
+        return localDate.toString();
     }
     public String TimeToString() { return localTime.toString(); }
 
