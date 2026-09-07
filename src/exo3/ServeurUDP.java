@@ -1,8 +1,9 @@
+package exo3;
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.time.LocalTime;
+import java.util.concurrent.TimeUnit;
 
 public class ServeurUDP {
     public static void main(String[] args) {
@@ -13,7 +14,7 @@ public class ServeurUDP {
             InetSocketAddress adresse = new InetSocketAddress("localhost", 6666);
             socketServeur.bind(adresse);
 
-            System.out.println("Serveur démarré, en attente de messages...");
+            System.out.println("Serveur démarré...");
 
             boolean actif = true;
             while (actif) {
@@ -22,24 +23,23 @@ public class ServeurUDP {
                 // 3 - Recevir
                 DatagramPacket paquetRecu = new DatagramPacket(recues, recues.length);
                 socketServeur.receive(paquetRecu); // bloquant : attend un message
+                NowDate t1prim = new NowDate();
 
-                String message = new String(paquetRecu.getData(), 0, paquetRecu.getLength());
-                System.out.println("Reçu: " + message);
+                String t1 = new String(paquetRecu.getData(), 0, paquetRecu.getLength());
+                System.out.println("Reçu: " + t1);
 
                 InetAddress adrClient = paquetRecu.getAddress();
                 int prtClient = paquetRecu.getPort();
 
-                // Condition de sortie
-                if (message.trim().equalsIgnoreCase("exit")) {
-                    System.out.println("Message exit reçu, le client a quitté");
-                } else {
-                    // 4 - Émettre l'heure courante
-                    NowDate dateActuelle = new NowDate();
-                    String reponse = dateActuelle.DateToString() +  " " + dateActuelle.TimeToString();
-                    byte[] envoyees = reponse.getBytes();
-                    DatagramPacket paquetEnvoye = new DatagramPacket(envoyees, envoyees.length, adrClient, prtClient);
-                    socketServeur.send(paquetEnvoye);
-                }
+                //TimeUnit.SECONDS.sleep(1);
+                // 4 - Émettre l'heure courante
+                NowDate t2prim = new NowDate();
+                String reponse =  t1 + ";"+  t1prim.TimeToString() + ";"+  t2prim.TimeToString();
+
+                byte[] envoyees = reponse.getBytes();
+                DatagramPacket paquetEnvoye = new DatagramPacket(envoyees, envoyees.length, adrClient, prtClient);
+                socketServeur.send(paquetEnvoye);
+
             }
 
             // 5 - Libérer le canal
