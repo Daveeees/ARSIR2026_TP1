@@ -1,42 +1,29 @@
 package exo3;
 
-import java.io.PrintWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ServeurTCP {
-    public static void main(String[] args) {
-        try {
-            // 1 - Création du serveur TCP sur le port 6666
-            ServerSocket socketServeur = new ServerSocket(6666);
-
-            System.out.println("Serveur TCP démarré sur le port 6666...");
-
-            while (true) {
-
-                // 2 - Attendre la connexion d'un client
-                Socket socketClient = socketServeur.accept();
-
-                System.out.println("Client connecté : "
-                        + socketClient.getInetAddress().getHostAddress());
-
-                // 3 - Flux permettant d'envoyer du texte
-                PrintWriter sortie =
-                        new PrintWriter(socketClient.getOutputStream(), true);
-
-                // 4 - Envoyer l'heure courante
-                NowDate maintenant = new NowDate();
-
-                sortie.println(maintenant.TimeToString());
-
-                // 5 - Fermer la connexion avec ce client
-                socketClient.close();
-
-                System.out.println("Connexion client fermée.");
-            }
-
-        } catch (Exception e) {
-            System.err.println(e);
-        }
-    }
-}
+ public static void main(String[] args){// Méthode principale
+         try{
+             // 1 - Création du canal
+             ServerSocket socketServeur = new ServerSocket(6666);
+             while(true){
+                 // 2 - Mise en attente
+                 Socket socketClient = socketServeur.accept();
+                 // 3 - Accepter la connexion
+                 System.out.println("Connexion avec : " + socketClient.getInetAddress());
+                 // 4- Emettre et recevoir
+                 ObjectInputStream fluxEntree = new ObjectInputStream(socketClient.getInputStream());
+                 ObjectOutputStream fluxSortie = new ObjectOutputStream(socketClient.getOutputStream());
+                 String message = (String) fluxEntree.readObject();
+                 System.out.println("Message reçu: " + message);
+                 fluxSortie.writeObject("Accusé de réception");
+                 }
+             }catch(Exception e){
+             System.err.println(e);
+             }
+         }
+ }

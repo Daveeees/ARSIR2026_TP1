@@ -1,34 +1,34 @@
 package exo3;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 public class ClientTCP {
-    public static void main(String[] args) {
+ public static void main(String[] args){// Méthode principale
+         try {
+             // 1 - Création du canal
+             Socket socket = new Socket();
+             InetSocketAddress adresseServeur = new InetSocketAddress("localhost", 6666);
 
-        try {
-            // 1 - Connexion au serveur
-            Socket socketClient = new Socket("localhost", 6666);
+             // 2 - Connexion avec un délai d'attente de 5 secondes
+             socket.connect(adresseServeur, 5000);
+             ObjectOutputStream fluxSortie = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream fluxEntree = new ObjectInputStream(socket.getInputStream());
 
-            System.out.println("Connecté au serveur.");
+             // 3 - Émettre et recevoir
+             String message = "Salve !";
+             fluxSortie.writeObject(message);
+             String reponse = (String) fluxEntree.readObject();
+             System.out.println("Message du serveur: " + reponse);
 
-            // 2 - Flux permettant de recevoir du texte
-            BufferedReader entree =
-                    new BufferedReader(
-                            new InputStreamReader(socketClient.getInputStream())
-                    );
-
-            // 3 - Recevoir l'heure envoyée par le serveur
-            String reponse = entree.readLine();
-
-            System.out.println("Heure du serveur : " + reponse);
-
-            // 4 - Fermeture de la socket
-            socketClient.close();
-
-        } catch (Exception e) {
-            System.err.println(e);
-        }
-    }
-}
+             // 4 - Libérer le canal
+             fluxEntree.close();
+             fluxSortie.close();
+             socket.close();
+             } catch (Exception e) {
+             System.err.println(e);
+             }
+         }
+ }
