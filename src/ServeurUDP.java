@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+
 public static void main(String[] args){// Méthode principale
      try{
          // 1 - Création du canal
@@ -14,8 +16,11 @@ public static void main(String[] args){// Méthode principale
          System.out.println("Reçu: " + message);
          // 4 - Émettre
          InetAddress adrClient = paquetRecu.getAddress(); int prtClient = paquetRecu.getPort();
-         String reponse = "Accusé de réception"; envoyees = reponse.getBytes();
-         DatagramPacket paquetEnvoye = new DatagramPacket(envoyees, envoyees.length, adrClient, prtClient);
+         Date dateActuelle =  new Date();
+         //String reponse = "Accusé de réception"; envoyees = reponse.getBytes();
+         String dateActuelleString = dateActuelle.localDate.toString();
+         byte[] dateEnvoyee = dateActuelleString.getBytes();
+         DatagramPacket paquetEnvoye = new DatagramPacket(dateEnvoyee, dateEnvoyee.length, adrClient, prtClient);
          socketServeur.send(paquetEnvoye);
          // 5 - Libérer le canal
          socketServeur.close();
