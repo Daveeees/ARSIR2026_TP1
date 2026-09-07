@@ -27,6 +27,7 @@ public class ClientTCP {
              fluxEntree.close();
              fluxSortie.close();
              socket.close();
+
              } catch (Exception e) {
              System.err.println(e);
              }
